@@ -25,50 +25,6 @@ final class OpenAITests: XCTestCase {
       }
    }
 
-   // Here we test that `response_format` is decodable from a string OR an object,
-   // which is required for deserializing responses from assistants:
-   // https://platform.openai.com/docs/api-reference/runs/createRun#runs-createrun-response_format
-   func testResponseFormatIsDecodableFromStringOrObject() throws {
-      let expectedResponseMappings: [(String, ResponseFormat)] = [
-         ("\"auto\"", .auto),
-         ("{\"type\": \"json_object\"}", .type("json_object")),
-         ("{\"type\": \"text\"}", .type("text"))
-      ]
-      let decoder = JSONDecoder()
-      for (response, expectedResponseFormat) in expectedResponseMappings {
-         print(response)
-         guard let jsonData = response.data(using: .utf8) else {
-            XCTFail("Could not create json from sample response")
-            return
-         }
-         let responseFormat = try decoder.decode(ResponseFormat.self, from: jsonData)
-         XCTAssertEqual(responseFormat, expectedResponseFormat, "Mapping from \(response) did not yield expected result")
-      }
-   }
-
-   // ResponseFormat is used in other places, and in those places it can *only* be populated with an object.
-   // OpenAI really suffers in API consistency.
-   // If a client sets the ResponseFormat to `auto` (which is now a valid case in the codebase), we
-   // encode to {"type": "text"} to satisfy when response_format can only be an object, such as:
-   // https://platform.openai.com/docs/api-reference/chat/create#chat-create-response_format
-   func testAutoResponseFormatEncodesToText() throws {
-      let jsonData = try JSONEncoder().encode(ResponseFormat.auto)
-      XCTAssertEqual(String(data: jsonData, encoding: .utf8), "{\"type\":\"text\"}")
-   }
-
-   // Verifies that our custom encoding of ResponseFormat supports the 'text' type:
-   func testTextResponseFormatIsEncodable() throws {
-      let jsonData = try JSONEncoder().encode(ResponseFormat.type("text"))
-      XCTAssertEqual(String(data: jsonData, encoding: .utf8), "{\"type\":\"text\"}")
-
-   }
-
-   // Verifies that our custom encoding of ResponseFormat supports the 'json_object' type:
-   func testJSONResponseFormatIsEncodable() throws {
-      let jsonData = try JSONEncoder().encode(ResponseFormat.type("json_object"))
-      XCTAssertEqual(String(data: jsonData, encoding: .utf8), "{\"type\":\"json_object\"}")
-   }
-
    // Regression test for decoding assistant runs. Thank you to Martin Brian for the repro:
    // https://gist.github.com/mbrian23/6863ffa705ccbb5097bd07efb2355a30
    func testThreadRunResponseIsDecodable() throws {

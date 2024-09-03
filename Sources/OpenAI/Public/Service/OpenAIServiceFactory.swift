@@ -36,6 +36,23 @@ public class OpenAIServiceFactory {
          decoder: decoder,
          debugEnabled: debugEnabled)
    }
+    
+    // MARK: OhMyGPT
+    public static func ohmygptService(
+       apiKey: String,
+       organizationID: String? = nil,
+       configuration: URLSessionConfiguration = .default,
+       decoder: JSONDecoder = .init(),
+       debugEnabled: Bool = false)
+       -> OpenAIService
+    {
+        OhMyGPTService(
+          apiKey: apiKey,
+          organizationID: organizationID,
+          configuration: configuration,
+          decoder: decoder,
+          debugEnabled: debugEnabled)
+    }
    
    // MARK: Azure
 
