@@ -73,6 +73,7 @@ struct OhMyGPTService: OpenAIService {
         var chatParameters = parameters
         chatParameters.stream = false
         let request = try OpenAIAPI.chat.request(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
+        debugPrint("start chat request url is \(request.description)")
         return try await fetch(debugEnabled: debugEnabled, type: ChatCompletionObject.self, with: request)
     }
     

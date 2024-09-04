@@ -1348,8 +1348,8 @@ extension OpenAIService {
       // Add headers if any, masking the Authorization token
       if let headers = request.allHTTPHeaderFields {
          for (header, value) in headers {
-            let maskedValue = header.lowercased() == "authorization" ? maskAuthorizationToken(value) : value
-            baseCommand += " \\\n-H \"\(header): \(maskedValue)\""
+//            let maskedValue = header.lowercased() == "authorization" ? maskAuthorizationToken(value) : value
+            baseCommand += " \\\n-H \"\(header): \(value)\""
          }
       }
       
