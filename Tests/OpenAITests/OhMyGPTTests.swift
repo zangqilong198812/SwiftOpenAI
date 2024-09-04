@@ -24,7 +24,7 @@ enum ConsumptionType: String, CaseIterable {
 }
 
 final class OhMyGPTTests: XCTestCase {
-    let service = OpenAIServiceFactory.ohmygptService(apiKey: "sk-v6a1OXCO36bf4e3181B4T3BLBKFJCAcDeaBa6F6d41F78B74", debugEnabled: true)
+    let service = OpenAIServiceFactory.ohmygptService(apiKey: "", debugEnabled: true)
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
